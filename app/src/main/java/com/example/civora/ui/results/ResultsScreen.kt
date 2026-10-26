@@ -126,6 +126,8 @@ fun ResultsScreen(viewModel: ResultsViewModel, onDone: () -> Unit) {
 private fun modeLabel(mode: String): String = when {
     mode == "quick" -> "Quick review"
     mode == "practice" -> "Practice"
+    mode == "mistakes" -> "Mistakes drill"
+    mode == "bookmarks" -> "Bookmarks drill"
     isMockMode(mode) -> if (mode.endsWith("mini")) "Mini mock exam" else "Full mock exam"
     else -> "Session"
 }

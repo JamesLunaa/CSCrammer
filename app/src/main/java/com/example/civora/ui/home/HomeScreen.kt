@@ -34,6 +34,8 @@ fun HomeScreen(
     onQuickReview: () -> Unit,
     onPractice: () -> Unit,
     onMock: () -> Unit,
+    onReview: () -> Unit,
+    onStats: () -> Unit,
 ) {
     val extras = CivoraTheme.colors
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -71,6 +73,8 @@ fun HomeScreen(
             ) { Text("Quick review · 10 random questions", style = MaterialTheme.typography.labelLarge) }
             ModeCard("Practice", "Pick a subject, topics and difficulty.", onPractice)
             ModeCard("Mock exam", "Full 170 items in 3h 10m, or a 50-item mini.", onMock)
+            ModeCard("Review", "Re-drill your mistakes and bookmarked questions.", onReview)
+            ModeCard("Progress", "Accuracy by subject, weakest topics, streak and history.", onStats)
         }
     }
 }

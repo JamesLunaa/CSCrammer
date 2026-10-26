@@ -14,6 +14,15 @@ sealed interface QuizSource {
         override val mode = "quick"
     }
 
+    /** Re-drill questions whose latest attempt is wrong. */
+    data object Mistakes : QuizSource {
+        override val mode = "mistakes"
+    }
+
+    data object Bookmarks : QuizSource {
+        override val mode = "bookmarks"
+    }
+
     /** [count] of 0 means every matching question. */
     data class Practice(
         val subject: Subject,
@@ -36,6 +45,8 @@ sealed interface QuizSource {
 
         fun route(source: QuizSource): String = when (source) {
             Quick -> "quiz/quick"
+            Mistakes -> "quiz/mistakes"
+            Bookmarks -> "quiz/bookmarks"
             is Practice -> "quiz/practice" +
                 "?subject=${source.subject.name}" +
                 "&topics=${Uri.encode(source.topics.joinToString("|"))}" +
@@ -46,6 +57,8 @@ sealed interface QuizSource {
         fun fromArgs(mode: String?, subject: String?, topics: String?, difficulties: String?, count: Int): QuizSource? =
             when (mode) {
                 Quick.mode -> Quick
+                Mistakes.mode -> Mistakes
+                Bookmarks.mode -> Bookmarks
                 "practice" -> {
                     val s = Subject.entries.firstOrNull { it.name == subject }
                     if (s == null) null else Practice(

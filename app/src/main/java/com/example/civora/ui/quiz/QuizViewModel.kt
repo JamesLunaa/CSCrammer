@@ -9,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,8 @@ class QuizViewModel(
         container.seeder.ensureSeeded()
         val questions = when (source) {
             QuizSource.Quick -> container.questions.random(QUICK_COUNT)
+            QuizSource.Mistakes -> container.questions.mistakes.first().shuffled()
+            QuizSource.Bookmarks -> container.questions.bookmarks.first().shuffled()
             is QuizSource.Practice -> container.questions.practice(
                 source.subject,
                 source.topics,

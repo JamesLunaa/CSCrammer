@@ -29,14 +29,20 @@ import com.example.civora.ui.practice.PracticeSetupViewModel
 import com.example.civora.ui.quiz.QuizScreen
 import com.example.civora.ui.quiz.QuizSource
 import com.example.civora.ui.quiz.QuizViewModel
+import com.example.civora.ui.review.ReviewScreen
+import com.example.civora.ui.review.ReviewViewModel
 import com.example.civora.ui.results.ResultsScreen
 import com.example.civora.ui.results.ResultsViewModel
+import com.example.civora.ui.stats.StatsScreen
+import com.example.civora.ui.stats.StatsViewModel
 import com.example.civora.ui.theme.CivoraTheme
 import com.example.civora.ui.theme.ThemeMode
 
 private object Routes {
     const val Home = "home"
     const val PracticeSetup = "practice-setup"
+    const val Review = "review"
+    const val Stats = "stats"
     const val MockSetup = "mock-setup"
     const val Mock = "mock/{kind}"
     const val Results = "results/{sessionId}"
@@ -65,6 +71,8 @@ class MainActivity : ComponentActivity() {
                                 onQuickReview = { nav.navigate(QuizSource.route(QuizSource.Quick)) },
                                 onPractice = { nav.navigate(Routes.PracticeSetup) },
                                 onMock = { nav.navigate(Routes.MockSetup) },
+                                onReview = { nav.navigate(Routes.Review) },
+                                onStats = { nav.navigate(Routes.Stats) },
                             )
                         }
                         composable(Routes.PracticeSetup) {
@@ -102,6 +110,26 @@ class MainActivity : ComponentActivity() {
                                 )
                                 QuizScreen(vm, onExit = { nav.popBackStack() }, onFinished = toResults)
                             }
+                        }
+                        composable(Routes.Review) {
+                            val vm = viewModel<ReviewViewModel>(
+                                factory = viewModelFactory { initializer { ReviewViewModel(container) } },
+                            )
+                            ReviewScreen(
+                                vm,
+                                onBack = { nav.popBackStack() },
+                                onDrill = { nav.navigate(QuizSource.route(it)) },
+                            )
+                        }
+                        composable(Routes.Stats) {
+                            val vm = viewModel<StatsViewModel>(
+                                factory = viewModelFactory { initializer { StatsViewModel(container) } },
+                            )
+                            StatsScreen(
+                                vm,
+                                onBack = { nav.popBackStack() },
+                                onOpenSession = { nav.navigate(Routes.results(it)) },
+                            )
                         }
                         composable(Routes.MockSetup) {
                             MockSetupScreen(
