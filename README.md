@@ -6,6 +6,10 @@
 
 <p align="center">An offline reviewer for the Philippine Civil Service Exam (CSC).</p>
 
+<p align="center">
+  <img src="docs/demo.gif" alt="CSCrammer demo: answering a quiz question, the five subjects, and offline use" width="800">
+</p>
+
 ---
 
 CSCrammer comes with 2,500 practice questions across the five CSC exam subjects. Install it and start reviewing right away: no account, no internet, and nothing to import.
@@ -57,7 +61,7 @@ Kotlin, Jetpack Compose with Material 3, Navigation Compose, Room, DataStore, an
 
 ## License
 
-Copyright (C) 2026 JamesLunaa
+Copyright (C) 2026 Jose Cynon Luna
 
 The source code is licensed under the [GNU General Public License v3.0](LICENSE). You may use, change and share it, but any version you distribute must also be released under GPL-3.0 with its source code.
 
