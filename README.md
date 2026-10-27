@@ -57,7 +57,7 @@ Kotlin, Jetpack Compose with Material 3, Navigation Compose, Room, DataStore, an
 
 ## License
 
-Copyright (C) 2026 JamesLunaa
+Copyright (C) 2026 Jose Cynon Luna
 
 The source code is licensed under the [GNU General Public License v3.0](LICENSE). You may use, change and share it, but any version you distribute must also be released under GPL-3.0 with its source code.
 
