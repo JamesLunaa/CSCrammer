@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.civora.data.db.Accuracy
@@ -71,9 +72,9 @@ fun HomeScreen(
             // The single lamp action on Home.
             Button(
                 onClick = onQuickReview,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
                 shape = RoundedCornerShape(14.dp),
-            ) { Text("Quick review · 10 random questions", style = MaterialTheme.typography.labelLarge) }
+            ) { Text("Quick review · 10 random questions", style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center) }
             ModeCard("Practice", "Pick a subject, topics and difficulty.", onPractice)
             ModeCard("Mock exam", "Full 170 items in 3h 10m, or a 50-item mini.", onMock)
             ModeCard("Review", "Re-drill your mistakes and bookmarked questions.", onReview)

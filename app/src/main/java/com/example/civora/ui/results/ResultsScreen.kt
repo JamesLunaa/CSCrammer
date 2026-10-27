@@ -7,11 +7,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -73,7 +75,7 @@ fun ResultsScreen(viewModel: ResultsViewModel, onDone: () -> Unit) {
             ) {
                 Button(
                     onClick = onDone,
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                     shape = RoundedCornerShape(14.dp),
                 ) { Text("Back to home", style = MaterialTheme.typography.labelLarge) }
             }
@@ -88,9 +90,10 @@ fun ResultsScreen(viewModel: ResultsViewModel, onDone: () -> Unit) {
                     item { ScoreBand(session.mode, session.correct, session.total, session.durationMs) }
                     item { Breakdown(subjectBreakdown(state.items)) }
                     item {
-                        Row(
+                        // FlowRow so the chip drops below the heading at large font scales.
+                        FlowRow(
                             Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
+                            itemVerticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text("Review answers", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })

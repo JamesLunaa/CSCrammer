@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -108,12 +109,12 @@ fun MockScreen(viewModel: MockViewModel, onExit: () -> Unit, onFinished: (Long) 
                         FilledTonalButton(
                             onClick = viewModel::previous,
                             enabled = state.index > 0,
-                            modifier = Modifier.weight(1f).height(48.dp),
+                            modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                             shape = RoundedCornerShape(14.dp),
                         ) { Text("Previous") }
                         OutlinedButton(
                             onClick = { showGrid = true },
-                            modifier = Modifier.weight(1f).height(48.dp),
+                            modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                             shape = RoundedCornerShape(14.dp),
                         ) { Text("${state.answers.size} / ${state.questions.size}", style = TotalNumber.copy(fontSize = 18.sp)) }
                     }
@@ -121,7 +122,7 @@ fun MockScreen(viewModel: MockViewModel, onExit: () -> Unit, onFinished: (Long) 
                     Button(
                         onClick = if (state.isLast) ({ confirmSubmit = true }) else viewModel::next,
                         enabled = !state.submitting,
-                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                         shape = RoundedCornerShape(14.dp),
                     ) { Text(if (state.isLast) "Submit exam" else "Next", style = MaterialTheme.typography.labelLarge) }
                 }
@@ -335,7 +336,7 @@ private fun Navigator(state: MockUiState, onPick: (Int) -> Unit, onSubmit: () ->
         }
         Button(
             onClick = onSubmit,
-            modifier = Modifier.fillMaxWidth().height(52.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
             shape = RoundedCornerShape(14.dp),
         ) { Text("Submit exam", style = MaterialTheme.typography.labelLarge) }
     }
