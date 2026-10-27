@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.civora"
+        applicationId = "com.JamesLunaa.cscrammer"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
