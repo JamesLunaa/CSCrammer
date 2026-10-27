@@ -47,7 +47,7 @@ fun HomeScreen(
                 .padding(horizontal = 24.dp, vertical = 32.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Text("Civora", style = MaterialTheme.typography.displayLarge, color = extras.onField)
+            Text("CSCrammer", style = MaterialTheme.typography.displayLarge, color = extras.onField)
             Text("Civil Service Exam reviewer", style = MaterialTheme.typography.bodyLarge, color = extras.fieldLilac)
             val answered = overall?.answered ?: 0
             Text(
