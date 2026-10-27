@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -99,7 +101,7 @@ fun StatsScreen(viewModel: StatsViewModel, onBack: () -> Unit, onOpenSession: (L
 @Composable
 private fun SubjectBars(rows: List<SubjectAccuracy>) {
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("By subject", style = MaterialTheme.typography.titleLarge)
+        Text("By subject", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         Subject.entries.forEach { subject ->
             val row = rows.firstOrNull { it.subject == subject.label }
             val tint = subjectColor(subject)
@@ -131,7 +133,7 @@ private fun SubjectBars(rows: List<SubjectAccuracy>) {
 @Composable
 private fun Weakest(rows: List<TopicAccuracy>) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("Weakest topics", style = MaterialTheme.typography.titleLarge)
+        Text("Weakest topics", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         rows.forEach { row ->
             val subject = Subject.entries.firstOrNull { it.label == row.subject }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -163,7 +165,7 @@ private fun sessionLabel(mode: String): String = when {
 private fun History(sessions: List<SessionEntity>, onOpen: (Long) -> Unit) {
     val fmt = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("Recent sessions", style = MaterialTheme.typography.titleLarge)
+        Text("Recent sessions", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         sessions.forEach { s ->
             val shape = RoundedCornerShape(14.dp)
             Row(

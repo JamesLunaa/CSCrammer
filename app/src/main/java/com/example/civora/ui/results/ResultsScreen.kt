@@ -28,6 +28,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.Role
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -90,7 +93,7 @@ fun ResultsScreen(viewModel: ResultsViewModel, onDone: () -> Unit) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text("Review answers", style = MaterialTheme.typography.titleLarge)
+                            Text("Review answers", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                             FilterChip(
                                 selected = wrongOnly,
                                 onClick = { wrongOnly = !wrongOnly },
@@ -177,7 +180,7 @@ private fun formatDuration(ms: Long): String {
 private fun Breakdown(scores: List<SubjectScore>) {
     if (scores.size < 2) return
     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("By subject", style = MaterialTheme.typography.titleLarge)
+        Text("By subject", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         scores.forEach { score ->
             val tint = subjectColor(score.subject)
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -216,7 +219,7 @@ private fun AnswerRow(item: ResultItem, number: Int, expanded: Boolean, onToggle
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainerHigh, shape)
             .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant), shape)
-            .clickable(onClickLabel = if (expanded) "Collapse" else "Show explanation", onClick = onToggle)
+            .clickable(role = Role.Button, onClickLabel = if (expanded) "Collapse" else "Show explanation", onClick = onToggle)
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {

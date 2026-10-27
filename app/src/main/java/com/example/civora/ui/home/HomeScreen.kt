@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.civora.data.db.Accuracy
@@ -36,6 +38,7 @@ fun HomeScreen(
     onMock: () -> Unit,
     onReview: () -> Unit,
     onStats: () -> Unit,
+    onSettings: () -> Unit,
 ) {
     val extras = CivoraTheme.colors
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -47,7 +50,7 @@ fun HomeScreen(
                 .padding(horizontal = 24.dp, vertical = 32.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Text("CSCrammer", style = MaterialTheme.typography.displayLarge, color = extras.onField)
+            Text("CSCrammer", style = MaterialTheme.typography.displayLarge, color = extras.onField, modifier = Modifier.semantics { heading() })
             Text("Civil Service Exam reviewer", style = MaterialTheme.typography.bodyLarge, color = extras.fieldLilac)
             val answered = overall?.answered ?: 0
             Text(
@@ -75,6 +78,7 @@ fun HomeScreen(
             ModeCard("Mock exam", "Full 170 items in 3h 10m, or a 50-item mini.", onMock)
             ModeCard("Review", "Re-drill your mistakes and bookmarked questions.", onReview)
             ModeCard("Progress", "Accuracy by subject, weakest topics, streak and history.", onStats)
+            ModeCard("Settings", "Theme and reset progress.", onSettings)
         }
     }
 }

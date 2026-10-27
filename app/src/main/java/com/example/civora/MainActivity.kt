@@ -33,6 +33,8 @@ import com.example.civora.ui.review.ReviewScreen
 import com.example.civora.ui.review.ReviewViewModel
 import com.example.civora.ui.results.ResultsScreen
 import com.example.civora.ui.results.ResultsViewModel
+import com.example.civora.ui.settings.SettingsScreen
+import com.example.civora.ui.settings.SettingsViewModel
 import com.example.civora.ui.stats.StatsScreen
 import com.example.civora.ui.stats.StatsViewModel
 import com.example.civora.ui.theme.CivoraTheme
@@ -43,6 +45,7 @@ private object Routes {
     const val PracticeSetup = "practice-setup"
     const val Review = "review"
     const val Stats = "stats"
+    const val Settings = "settings"
     const val MockSetup = "mock-setup"
     const val Mock = "mock/{kind}"
     const val Results = "results/{sessionId}"
@@ -73,6 +76,7 @@ class MainActivity : ComponentActivity() {
                                 onMock = { nav.navigate(Routes.MockSetup) },
                                 onReview = { nav.navigate(Routes.Review) },
                                 onStats = { nav.navigate(Routes.Stats) },
+                                onSettings = { nav.navigate(Routes.Settings) },
                             )
                         }
                         composable(Routes.PracticeSetup) {
@@ -120,6 +124,12 @@ class MainActivity : ComponentActivity() {
                                 onBack = { nav.popBackStack() },
                                 onDrill = { nav.navigate(QuizSource.route(it)) },
                             )
+                        }
+                        composable(Routes.Settings) {
+                            val vm = viewModel<SettingsViewModel>(
+                                factory = viewModelFactory { initializer { SettingsViewModel(container) } },
+                            )
+                            SettingsScreen(vm, onBack = { nav.popBackStack() })
                         }
                         composable(Routes.Stats) {
                             val vm = viewModel<StatsViewModel>(
