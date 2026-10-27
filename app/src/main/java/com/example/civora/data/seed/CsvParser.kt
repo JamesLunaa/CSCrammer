@@ -14,7 +14,7 @@ object CsvParser {
         val field = StringBuilder()
         var inQuotes = false
         var fieldStarted = false
-        val text = reader.readText().removePrefix("﻿")
+        val text = reader.readText().removePrefix("\uFEFF")
         var i = 0
 
         fun endField() {

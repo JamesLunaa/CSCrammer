@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +33,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,9 +53,11 @@ import com.example.civora.ui.theme.TotalNumber
 import com.example.civora.ui.theme.subjectColor
 
 @Composable
-fun QuizScreen(viewModel: QuizViewModel, onExit: () -> Unit) {
+fun QuizScreen(viewModel: QuizViewModel, onExit: () -> Unit, onFinished: (Long) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val question = state.current
+
+    state.finishedSessionId?.let { id -> LaunchedEffect(id) { onFinished(id) } }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -81,7 +87,7 @@ fun QuizScreen(viewModel: QuizViewModel, onExit: () -> Unit) {
                     Button(
                         onClick = if (state.revealed) viewModel::next else viewModel::check,
                         enabled = state.revealed || state.selected != null,
-                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                         shape = RoundedCornerShape(14.dp),
                     ) {
                         Text(
@@ -101,7 +107,7 @@ fun QuizScreen(viewModel: QuizViewModel, onExit: () -> Unit) {
             when {
                 state.loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
                 state.questions.isEmpty() -> Message("No questions available.", "Back", onExit)
-                state.finished -> Summary(state.correct, state.questions.size, onExit)
+                state.finished -> CircularProgressIndicator(Modifier.align(Alignment.Center))
                 question != null -> QuestionBody(
                     question = question,
                     selected = state.selected,
@@ -274,6 +280,7 @@ private fun Feedback(question: Question, correct: Boolean) {
         Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(14.dp))
+            .semantics { liveRegion = LiveRegionMode.Polite }
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -287,26 +294,6 @@ private fun Feedback(question: Question, correct: Boolean) {
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
-    }
-}
-
-@Composable
-private fun Summary(correct: Int, total: Int, onDone: () -> Unit) {
-    Column(
-        Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text("Done", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(
-            "$correct / $total",
-            style = com.example.civora.ui.theme.HeroNumber,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Box(Modifier.height(24.dp))
-        Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(14.dp)) {
-            Text("Back to home", style = MaterialTheme.typography.labelLarge)
-        }
     }
 }
 
