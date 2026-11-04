@@ -56,18 +56,21 @@ Release builds use R8 to shrink the code. To sign them, copy `keystore.propertie
 ./gradlew bundleRelease     # Android App Bundle for Google Play
 ```
 
-### Automatic release APKs
+### Publishing a release
 
-Publishing a GitHub release runs `.github/workflows/release.yml`. It runs the unit tests, builds the signed APK and attaches it to the release as `CSCrammer-v<tag>.apk`. It needs four repository secrets:
+`scripts/release.sh` builds the signed APK on your machine and publishes it as a GitHub release, so the signing key never leaves your computer. It needs the [GitHub CLI](https://cli.github.com/) (`gh`), logged in.
 
-| Secret | Value |
-|---|---|
-| `KEYSTORE_BASE64` | your keystore file, base64-encoded (`base64 -w0 your.jks`) |
-| `KEYSTORE_PASSWORD` | the keystore password |
-| `KEY_ALIAS` | the key alias |
-| `KEY_PASSWORD` | the key password |
+1. Bump `versionCode` and `versionName` in `app/build.gradle.kts`.
+2. Add a `## [<version>]` section to `CHANGELOG.md`.
+3. Merge to `master`, then check out `master`.
+4. Run:
 
-Without them, the workflow skips the build and attaches nothing. You can also run it by hand for an existing release from the Actions tab.
+```sh
+scripts/release.sh --dry-run 1.2   # checks, tests and builds, but doesn't publish
+scripts/release.sh 1.2             # same, then asks before creating the release
+```
+
+It stops early if the tree isn't clean, `master` isn't in sync with GitHub, the version or changelog doesn't match, or the tag already exists. It then runs the unit tests, builds and verifies the signed APK, copies it to `dist/CSCrammer-v<version>.apk`, and creates the release with that version's changelog section and the APK's SHA-256 checksum.
 
 ## Tech stack
 
