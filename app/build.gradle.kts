@@ -40,6 +40,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Installs next to the release build, so testing never touches real progress.
+            applicationIdSuffix = ".debug"
+        }
         release {
             if (keystoreProps != null) signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
@@ -50,6 +54,8 @@ android {
     buildFeatures {
         compose = true
     }
+    // Exported Room schemas, for MigrationTestHelper.
+    sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -80,4 +86,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.room.testing)
+    constraints {
+        implementation(libs.kotlinx.serialization.core)
+        implementation(libs.kotlinx.serialization.json)
+    }
 }
