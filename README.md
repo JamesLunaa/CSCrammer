@@ -20,6 +20,7 @@ CSCrammer comes with 2,500 practice questions across the five CSC exam subjects.
 - **Practice:** choose a subject, topics, difficulty and how many questions.
 - **Mock exam:** a full 170-item exam in 3h 10m, or a 50-item mini in 55 minutes. It has a timer, a question navigator and flags, and submits itself when time runs out. You need 80% to pass.
 - **Review:** re-drill questions you got wrong, plus any you bookmarked.
+- **My questions:** write your own questions with four choices, an answer key and an explanation. They join Practice, Quick review and mock exams, and you can drill them on their own. App updates keep them.
 - **Progress:**
   - overall accuracy
   - accuracy per subject
@@ -54,6 +55,19 @@ Release builds use R8 to shrink the code. To sign them, copy `keystore.propertie
 ./gradlew assembleRelease   # APK
 ./gradlew bundleRelease     # Android App Bundle for Google Play
 ```
+
+### Automatic release APKs
+
+Publishing a GitHub release runs `.github/workflows/release.yml`. It runs the unit tests, builds the signed APK and attaches it to the release as `CSCrammer-v<tag>.apk`. It needs four repository secrets:
+
+| Secret | Value |
+|---|---|
+| `KEYSTORE_BASE64` | your keystore file, base64-encoded (`base64 -w0 your.jks`) |
+| `KEYSTORE_PASSWORD` | the keystore password |
+| `KEY_ALIAS` | the key alias |
+| `KEY_PASSWORD` | the key password |
+
+Without them, the workflow skips the build and attaches nothing. You can also run it by hand for an existing release from the Actions tab.
 
 ## Tech stack
 
