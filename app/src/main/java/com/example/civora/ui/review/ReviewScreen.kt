@@ -90,7 +90,11 @@ fun ReviewScreen(viewModel: ReviewViewModel, onBack: () -> Unit, onDrill: (QuizS
                     shape = RoundedCornerShape(14.dp),
                 ) {
                     Text(
-                        if (list.isEmpty()) "Nothing to drill" else "Drill ${list.size} questions",
+                        when (list.size) {
+                            0 -> "Nothing to drill"
+                            1 -> "Drill 1 question"
+                            else -> "Drill ${list.size} questions"
+                        },
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }

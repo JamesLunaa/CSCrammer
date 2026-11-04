@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 data class PoolCount(val subject: String, val topic: String, val difficulty: String, val count: Int)
@@ -19,11 +20,30 @@ interface QuestionDao {
     @Insert
     suspend fun insertAll(questions: List<QuestionEntity>)
 
-    @Query("DELETE FROM questions")
-    suspend fun deleteAll()
+    @Query("DELETE FROM questions WHERE isCustom = 0")
+    suspend fun deleteBundled()
 
     @Query("SELECT COUNT(*) FROM questions")
     suspend fun count(): Int
+
+    @Query("SELECT COUNT(*) FROM questions WHERE isCustom = 0")
+    suspend fun bundledCount(): Int
+
+    @Query("SELECT * FROM questions WHERE isCustom = 1 ORDER BY id DESC")
+    fun custom(): Flow<List<QuestionEntity>>
+
+    @Query("SELECT * FROM questions WHERE id = :id")
+    suspend fun byId(id: Int): QuestionEntity?
+
+    /** Next free id at or above [floor], so custom ids never collide with bundled ones. */
+    @Query("SELECT COALESCE(MAX(id) + 1, :floor) FROM questions WHERE id >= :floor")
+    suspend fun nextIdFrom(floor: Int): Int
+
+    @Upsert
+    suspend fun upsert(question: QuestionEntity)
+
+    @Query("DELETE FROM questions WHERE id = :id AND isCustom = 1")
+    suspend fun deleteCustom(id: Int)
 
     @Query("SELECT subject, topic, difficulty, COUNT(*) AS count FROM questions GROUP BY subject, topic, difficulty")
     fun poolCounts(): Flow<List<PoolCount>>
@@ -87,7 +107,11 @@ interface AttemptDao {
     @Query("SELECT * FROM attempts WHERE sessionId = :sessionId ORDER BY id")
     suspend fun forSession(sessionId: Long): List<AttemptEntity>
 
-    @Query("SELECT COUNT(*) AS answered, COALESCE(SUM(isCorrect), 0) AS correct FROM attempts")
+    // Joined to questions so attempts on deleted custom questions drop out, matching the other stats.
+    @Query(
+        """SELECT COUNT(*) AS answered, COALESCE(SUM(a.isCorrect), 0) AS correct
+        FROM attempts a JOIN questions q ON q.id = a.questionId""",
+    )
     fun overall(): Flow<Accuracy>
 
     @Query(

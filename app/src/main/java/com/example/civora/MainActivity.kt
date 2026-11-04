@@ -20,6 +20,10 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.civora.domain.MockKind
+import com.example.civora.ui.custom.MyQuestionsScreen
+import com.example.civora.ui.custom.MyQuestionsViewModel
+import com.example.civora.ui.custom.QuestionEditorScreen
+import com.example.civora.ui.custom.QuestionEditorViewModel
 import com.example.civora.ui.home.HomeScreen
 import com.example.civora.ui.mock.MockScreen
 import com.example.civora.ui.mock.MockSetupScreen
@@ -49,6 +53,9 @@ private object Routes {
     const val MockSetup = "mock-setup"
     const val Mock = "mock/{kind}"
     const val Results = "results/{sessionId}"
+    const val MyQuestions = "my-questions"
+    const val Editor = "question-editor?id={id}"
+    fun editor(id: Int? = null) = if (id == null) "question-editor" else "question-editor?id=$id"
     fun mock(kind: MockKind) = "mock/${kind.key}"
     fun results(sessionId: Long) = "results/$sessionId"
 }
@@ -75,6 +82,7 @@ class MainActivity : ComponentActivity() {
                                 onPractice = { nav.navigate(Routes.PracticeSetup) },
                                 onMock = { nav.navigate(Routes.MockSetup) },
                                 onReview = { nav.navigate(Routes.Review) },
+                                onMyQuestions = { nav.navigate(Routes.MyQuestions) },
                                 onStats = { nav.navigate(Routes.Stats) },
                                 onSettings = { nav.navigate(Routes.Settings) },
                             )
@@ -124,6 +132,28 @@ class MainActivity : ComponentActivity() {
                                 onBack = { nav.popBackStack() },
                                 onDrill = { nav.navigate(QuizSource.route(it)) },
                             )
+                        }
+                        composable(Routes.MyQuestions) {
+                            val vm = viewModel<MyQuestionsViewModel>(
+                                factory = viewModelFactory { initializer { MyQuestionsViewModel(container) } },
+                            )
+                            MyQuestionsScreen(
+                                vm,
+                                onBack = { nav.popBackStack() },
+                                onAdd = { nav.navigate(Routes.editor()) },
+                                onEdit = { nav.navigate(Routes.editor(it)) },
+                                onDrill = { nav.navigate(QuizSource.route(QuizSource.Custom)) },
+                            )
+                        }
+                        composable(
+                            Routes.Editor,
+                            arguments = listOf(navArgument("id") { type = NavType.IntType; defaultValue = -1 }),
+                        ) { entry ->
+                            val id = entry.arguments?.getInt("id")?.takeIf { it >= 0 }
+                            val vm = viewModel<QuestionEditorViewModel>(
+                                factory = viewModelFactory { initializer { QuestionEditorViewModel(container, id) } },
+                            )
+                            QuestionEditorScreen(vm, onClose = { nav.popBackStack() })
                         }
                         composable(Routes.Settings) {
                             val vm = viewModel<SettingsViewModel>(

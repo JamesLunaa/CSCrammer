@@ -9,7 +9,9 @@ import com.example.civora.data.db.BookmarkEntity
 import com.example.civora.data.db.CivoraDatabase
 import com.example.civora.data.db.SessionEntity
 import com.example.civora.data.prefs.AppPreferences
+import com.example.civora.data.repo.QuestionRepository
 import com.example.civora.data.seed.QuestionSeeder
+import com.example.civora.domain.QuestionDraft
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -68,5 +70,26 @@ class SeedingTest {
         assertEquals(1, db.attemptDao().forSession(sessionId).size)
         assertEquals(listOf(2), db.bookmarkDao().ids().first())
         assertEquals(listOf(1), db.questionDao().mistakes().first().map { it.id })
+    }
+
+    @Test
+    fun reseedKeepsCustomQuestions() = runBlocking {
+        seeder().ensureSeeded()
+        val repo = QuestionRepository(db.questionDao(), db.bookmarkDao())
+        val draft = QuestionDraft(text = "Mine?", choices = listOf("w", "x", "y", "z"), answerIndex = 2)
+        val first = repo.saveCustom(draft, null)
+        val second = repo.saveCustom(draft, null)
+        assertEquals(QuestionSeeder.CUSTOM_ID_START, first)
+        assertEquals(QuestionSeeder.CUSTOM_ID_START + 1, second)
+
+        prefs.setDataVersion(0)
+        seeder().ensureSeeded()
+
+        assertEquals(2502, db.questionDao().count())
+        assertEquals(listOf(second, first), repo.custom.first().map { it.id })
+        assertEquals(2, repo.question(first)?.answerIndex)
+
+        repo.deleteCustom(first)
+        assertEquals(listOf(second), repo.custom.first().map { it.id })
     }
 }

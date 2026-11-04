@@ -56,6 +56,7 @@ class QuizViewModel(
             QuizSource.Quick -> container.questions.random(QUICK_COUNT)
             QuizSource.Mistakes -> container.questions.mistakes.first().shuffled()
             QuizSource.Bookmarks -> container.questions.bookmarks.first().shuffled()
+            QuizSource.Custom -> container.questions.custom.first().shuffled()
             is QuizSource.Practice -> container.questions.practice(
                 source.subject,
                 source.topics,
