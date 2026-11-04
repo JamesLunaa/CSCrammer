@@ -134,6 +134,7 @@ private fun modeLabel(mode: String): String = when {
     mode == "practice" -> "Practice"
     mode == "mistakes" -> "Mistakes drill"
     mode == "bookmarks" -> "Bookmarks drill"
+    mode == "custom" -> "My questions drill"
     isMockMode(mode) -> if (mode.endsWith("mini")) "Mini mock exam" else "Full mock exam"
     else -> "Session"
 }
@@ -251,7 +252,9 @@ private fun AnswerRow(item: ResultItem, number: Int, expanded: Boolean, onToggle
                 }
                 Text("${choiceLetter(i)}.  $text", style = MaterialTheme.typography.bodyMedium, color = mark)
             }
-            Text(q.explanation, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+            if (q.explanation.isNotBlank()) {
+                Text(q.explanation, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+            }
         }
     }
 }

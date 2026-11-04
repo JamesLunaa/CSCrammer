@@ -157,6 +157,7 @@ private fun sessionLabel(mode: String): String = when {
     mode == "practice" -> "Practice"
     mode == "mistakes" -> "Mistakes drill"
     mode == "bookmarks" -> "Bookmarks drill"
+    mode == "custom" -> "My questions drill"
     isMockMode(mode) -> if (mode.endsWith("mini")) "Mini mock" else "Full mock"
     else -> "Session"
 }

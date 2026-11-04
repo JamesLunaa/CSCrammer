@@ -289,11 +289,13 @@ private fun Feedback(question: Question, correct: Boolean) {
             style = MaterialTheme.typography.titleMedium,
             color = tint,
         )
-        Text(
-            question.explanation,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+        if (question.explanation.isNotBlank()) {
+            Text(
+                question.explanation,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
     }
 }
 

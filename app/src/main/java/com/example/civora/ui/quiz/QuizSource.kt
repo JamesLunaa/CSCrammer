@@ -23,6 +23,11 @@ sealed interface QuizSource {
         override val mode = "bookmarks"
     }
 
+    /** Every question the user wrote. */
+    data object Custom : QuizSource {
+        override val mode = "custom"
+    }
+
     /** [count] of 0 means every matching question. */
     data class Practice(
         val subject: Subject,
@@ -47,6 +52,7 @@ sealed interface QuizSource {
             Quick -> "quiz/quick"
             Mistakes -> "quiz/mistakes"
             Bookmarks -> "quiz/bookmarks"
+            Custom -> "quiz/custom"
             is Practice -> "quiz/practice" +
                 "?subject=${source.subject.name}" +
                 "&topics=${Uri.encode(source.topics.joinToString("|"))}" +
@@ -59,6 +65,7 @@ sealed interface QuizSource {
                 Quick.mode -> Quick
                 Mistakes.mode -> Mistakes
                 Bookmarks.mode -> Bookmarks
+                Custom.mode -> Custom
                 "practice" -> {
                     val s = Subject.entries.firstOrNull { it.name == subject }
                     if (s == null) null else Practice(

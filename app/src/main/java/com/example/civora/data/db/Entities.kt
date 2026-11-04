@@ -1,5 +1,6 @@
 package com.example.civora.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -21,6 +22,8 @@ data class QuestionEntity(
     val d: String,
     val answer: String,
     val explanation: String,
+    /** Written by the user in the app. Re-seeding never touches these rows. */
+    @ColumnInfo(defaultValue = "0") val isCustom: Boolean = false,
 )
 
 @Entity(tableName = "sessions")

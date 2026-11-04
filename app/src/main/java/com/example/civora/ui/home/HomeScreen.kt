@@ -38,6 +38,7 @@ fun HomeScreen(
     onPractice: () -> Unit,
     onMock: () -> Unit,
     onReview: () -> Unit,
+    onMyQuestions: () -> Unit,
     onStats: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -78,6 +79,7 @@ fun HomeScreen(
             ModeCard("Practice", "Pick a subject, topics and difficulty.", onPractice)
             ModeCard("Mock exam", "Full 170 items in 3h 10m, or a 50-item mini.", onMock)
             ModeCard("Review", "Re-drill your mistakes and bookmarked questions.", onReview)
+            ModeCard("My questions", "Write your own questions with an answer key and explanation.", onMyQuestions)
             ModeCard("Progress", "Accuracy by subject, weakest topics, streak and history.", onStats)
             ModeCard("Settings", "Theme and reset progress.", onSettings)
         }

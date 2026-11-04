@@ -77,7 +77,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, onBack: () -> Unit) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Progress", style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
                 Text(
-                    if (resetDone) "Progress cleared." else "Clears every attempt, session and bookmark. The 2,500 questions stay.",
+                    if (resetDone) "Progress cleared." else "Clears every attempt, session and bookmark. The 2,500 bundled questions and your own questions stay.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
